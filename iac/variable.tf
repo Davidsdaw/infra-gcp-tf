@@ -13,21 +13,21 @@ variable "environment" {
     default     = "dev"
 }
 
-variable "backend_bucket" {
-    type        = string
-    description = "S3 bucket for Terraform state"
-    default     = "tf-state-davidsdaw"
-}
-variable "dynamodb_table" {
-    type        = string
-    description = "DynamoDB table for Terraform state locking"
-    default     = "terraform-locks"
-}
-variable "backend_key" {
-    type        = string
-    description = "S3 key for Terraform state"
-    default     = "global/s3/terraform.tfstate"
-}
+# variable "backend_bucket" {
+#     type        = string
+#     description = "S3 bucket for Terraform state"
+#     default     = "tf-state-davidsdaw"
+# }
+# variable "dynamodb_table" {
+#     type        = string
+#     description = "DynamoDB table for Terraform state locking"
+#     default     = "terraform-locks"
+# }
+# variable "backend_key" {
+#     type        = string
+#     description = "S3 key for Terraform state"
+#     default     = "global/s3/terraform.tfstate"
+# }
 
 ##############################
 # Tags variables
@@ -79,7 +79,7 @@ variable "private_subnet_cidrs" {
 variable "availability_zones" {
     type        = list(string)
     description = "List of availability zones"
-    default     = [var.aws_region + "a"]
+    default     = ["eu-west-3a"]
 }
 ##############################
 # ECR variables
@@ -114,18 +114,13 @@ variable "ec2_instance_type" {
 }
 variable "ec2_ami" {
     type        = string
-    description = "AMI ID for the EC2 instance"
-    default     = "ami-0c02fb55956c7d316"
+    description = "AMI ID for the EC2 instance (must be valid for the region)"
+    default     = "ami-01b61c8c632a16708"  # Amazon Linux 2 in eu-west-3
 }
 variable "ec2_key_name" {
     type        = string
     description = "Key pair name for the EC2 instance"
-    default     = "keypair1"
-}
-variable "ec2_subnet_id" {
-    type        = string
-    description = "Subnet ID for the EC2 instance"
-    default     = module.vpc.public_subnet_cidrs[0]
+    default     = "backup-server"
 }
 variable "ec2_root_volume_size" {
     type        = number
