@@ -1,20 +1,23 @@
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "5.5.0"
 
   name           = var.ec2_name
   instance_type  = var.ec2_instance_type
   ami            = var.ec2_ami
   key_name       = var.ec2_key_name
   monitoring     = var.ec2_monitoring
-  subnet_id      = var.ec2_subnet_id
+  subnet_id      = module.vpc.public_subnets[0]
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
 
   # EBS mínimo para Free Tier
-  root_block_device = {
-    volume_size = var.ec2_root_volume_size
-    volume_type = var.ec2_root_volume_type
-  }
+  root_block_device = [
+    {
+      volume_size = var.ec2_root_volume_size
+      volume_type = var.ec2_root_volume_type
+    }
+  ]
   user_data = <<-EOF
               #!/bin/bash
               # Actualizamos el sistema
