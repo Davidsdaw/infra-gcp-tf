@@ -45,4 +45,4 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
       ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-      GITHUB_TOKEN: ${{ secrets.PAT }}
+      PAT: ${{ secrets.PAT }}
