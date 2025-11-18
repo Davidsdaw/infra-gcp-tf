@@ -30,7 +30,7 @@ jobs:
 
   run-docker-image:
     needs: create_infra
-    uses: Davidsdaw/Portfolio-Cloud/actions/workflows/reusable-upload-to-ecr.yml@main
+    uses: Davidsdaw/Portfolio-Cloud/.github/workflows/reusable-upload-to-ecr.yml@main
     with:
       IMAGETAG: ${{ github.event.inputs.IMAGETAG }}
     secrets:
