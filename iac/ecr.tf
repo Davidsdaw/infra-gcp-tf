@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "foo" {
-  name                 = "bar"
+  name                 = "webapp-repo"
   image_tag_mutability = "MUTABLE"
   force_delete = true
 
