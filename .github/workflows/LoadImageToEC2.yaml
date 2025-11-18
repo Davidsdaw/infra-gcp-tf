@@ -65,18 +65,18 @@ jobs:
           ECR_REGISTRY="282019134684.dkr.ecr.eu-west-3.amazonaws.com"
           IMAGE="${ECR_REGISTRY}:${IMAGE_TAG}"
 
-          COMMANDS=(
-            "aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
-            "docker pull ${IMAGE}"
-            "docker stop ${CONTAINER_NAME} || true"
-            "docker rm ${CONTAINER_NAME} || true"
-            "docker run -d --restart always -p ${HOST_PORT}:${CONTAINER_PORT} --name ${CONTAINER_NAME} ${IMAGE}"
-          )
+          COMMANDS_JSON=$(jq -n \
+            --arg c1 "aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}" \
+            --arg c2 "docker pull ${IMAGE}" \
+            --arg c3 "docker stop ${CONTAINER_NAME} || true" \
+            --arg c4 "docker rm ${CONTAINER_NAME} || true" \
+            --arg c5 "docker run -d --restart always -p ${HOST_PORT}:${CONTAINER_PORT} --name ${CONTAINER_NAME} ${IMAGE}" \
+            '$ARGS.positional')
 
           # Ejecutar comando SSM
           aws ssm send-command \
             --instance-ids $(echo "${INSTANCE_IDS}" | tr ' ' ' ') \
             --document-name "AWS-RunShellScript" \
-            --parameters commands="${COMMANDS[@]}" \
+            --parameters commands="${COMMANDS_JSON}" \
             --region "${REGION}" \
             --comment "Deploy ${IMAGE} to instances"
