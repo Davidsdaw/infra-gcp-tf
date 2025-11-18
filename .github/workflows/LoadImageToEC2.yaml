@@ -71,12 +71,12 @@ jobs:
             --arg c3 "docker stop ${CONTAINER_NAME} || true" \
             --arg c4 "docker rm ${CONTAINER_NAME} || true" \
             --arg c5 "docker run -d --restart always -p ${HOST_PORT}:${CONTAINER_PORT} --name ${CONTAINER_NAME} ${IMAGE}" \
-            '$ARGS.positional')
+            '{commands: [$c1, $c2, $c3, $c4, $c5]}')
 
           # Ejecutar comando SSM
           aws ssm send-command \
             --instance-ids $(echo "${INSTANCE_IDS}" | tr ' ' ' ') \
             --document-name "AWS-RunShellScript" \
-            --parameters commands="${COMMANDS_JSON}" \
+            --parameters "${COMMANDS_JSON}" \
             --region "${REGION}" \
-            --comment "Deploy ${IMAGE} to instances"
+            --comment "Deploy ${IMAGE} to instances" 
