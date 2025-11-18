@@ -1,0 +1,30 @@
+name: Delete Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "DELETE" to confirm deletion of infrastructure'
+        required: true
+        default: 'NO'
+
+jobs:
+  delete_infra:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'DELETE' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      - name: Initialize Terraform
+        run: terraform init
+        working-directory: ./iac
+
+      - name: Destroy Infrastructure
+        run: terraform destroy -auto-approve
+        working-directory: ./iac
